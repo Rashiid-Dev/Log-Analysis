@@ -17,6 +17,15 @@ You will use this 'internal reporting tool' that will comb through a large datab
 1. Install Vagrant And VirtualBox
 2. Clone this repository
 
+### Views Created
+`truepath` view has been created using this code
+
+`make_view = """create or replace view truepath as
+               select replace(path , '/article/', ''),
+               ip, method, status, time,
+               id from log where path != '/'
+            """`
+
 ### Running the program
 
 Launch Vagrant VM by running `vagrant up`, you can the log in with `vagrant ssh`
