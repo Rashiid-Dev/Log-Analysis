@@ -15,17 +15,25 @@ else:
 
 c = conn.cursor()
 
-queryarti = """select b.title, count(*) as num from (select * from articles join truepath on articles.slug=truepath.replace) 
-               as b join authors on authors.id = b.author group by title order by num desc limit 3
+queryarti = """select b.title, count(*) as num from
+               (select * from articles join truepath on
+               articles.slug=truepath.replace)
+               as b join authors on authors.id = b.author group
+               by title order by num desc limit 3
             """
 
 
-queryauth = """select name, count(*) as num from (select * from articles join truepath on articles.slug=truepath.replace)
-            as b join authors on authors.id = b.author group by name order by num desc
+queryauth = """select name, count(*) as num from
+               (select * from articles join truepath
+               on articles.slug=truepath.replace)
+               as b join authors on authors.id = b.author
+               group by name order by num desc
             """
 
-make_view = """ create or replace view truepath as
-                 select replace(path , '/article/', ''), ip, method, status, time, id from log where path != '/' 
+make_view = """create or replace view truepath as
+               select replace(path , '/article/', ''),
+               ip, method, status, time,
+               id from log where path != '/'
             """
 
 queryerrors = """
@@ -33,8 +41,8 @@ select * from (
     select a.day,
     round(cast((100*b.errors) as numeric) / cast(a.errors as numeric), 2)
     as numz from
-        (select date(time) as day, count(*) as errors from log group by day) as a
-        inner join
+        (select date(time) as day, count(*) as errors from log group by day)
+        as a inner join
         (select date(time) as day, count(*) as errors from log where status
         = '404 NOT FOUND' group by day) as b
     on a.day = b.day)
